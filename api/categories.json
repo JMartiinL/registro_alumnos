@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Diplomatura" },
+  { "id": 2, "name": "Tecnicatura" },
+  { "id": 3, "name": "Profesorado" },
+  { "id": 4, "name": "Licenciatura" },
+  { "id": 5, "name": "Tecnicatura superior" }
+]

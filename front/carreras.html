@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Carreras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/> 
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">Instituto</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Alumnos</a></li>
+          <li class="nav-item"><a class="nav-link" href="carreras.html">Carreras</a></li>
+          <li class="nav-item"><a class="nav-link" href="categorias.html">Categorías</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-5">
+    <h1>Registrar Carrera</h1>
+    <form id="formCarrera" class="mb-4">
+      <div class="mb-3">
+        <label for="nombreCarrera" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombreCarrera" required>
+      </div>
+      <div class="mb-3">
+        <label for="categoriaCarrera" class="form-label">Categoría</label>
+        <select id="categoriaCarrera" class="form-select" required>
+          <option selected disabled>Seleccione una categoría</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+
+    <hr />
+
+    <h2>Buscar Carrera por ID</h2>
+    <div class="input-group mb-3">
+      <input type="number" id="buscarCarreraId" class="form-control" placeholder="ID de la carrera">
+      <button class="btn btn-info" onclick="buscarCarrera()">Buscar</button>
+    </div>
+
+    <h2>Eliminar Carrera por ID</h2>
+    <div class="input-group mb-3">
+      <input type="number" id="eliminarCarreraId" class="form-control" placeholder="ID de la carrera">
+      <button class="btn btn-danger" onclick="eliminarCarrera(document.getElementById('eliminarCarreraId').value)">Eliminar</button>
+    </div>
+    <hr />
+
+    <h2>Listado de Carreras</h2>
+    <button class="btn btn-secondary mb-3" onclick="cargarCarreras()">Recargar lista</button>
+    <table class="table table-striped" id="tablaCarreras">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se carga dinámicamente -->
+      </tbody>
+    </table>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="app.js"></script>
+</body>
+</html>
