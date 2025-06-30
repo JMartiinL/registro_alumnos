@@ -359,3 +359,25 @@ async function eliminarCategoria(id) {
   }
 }
 window.eliminarCategoria = eliminarCategoria;
+
+/* ==========================================================
+   RESUMEN DEL FLUJO DE FUNCIONAMIENTO DE LA APLICACIÓN
+==========================================================
+
+1. Los archivos HTML muestran formularios y tablas para alumnos, carreras y categorías.
+2. Al cargar la página, app.js detecta los elementos presentes y:
+   - Asocia eventos a los formularios para registrar datos.
+   - Llama funciones para cargar y mostrar los listados.
+   - Expone funciones globales para eliminar y buscar registros.
+3. Cuando el usuario registra, elimina o busca:
+   - app.js toma los datos y realiza peticiones fetch a la API (index.js) usando la API Key.
+   - La API valida, procesa la acción y responde en JSON.
+   - app.js actualiza la interfaz y muestra alertas según el resultado.
+4. Los datos se almacenan en archivos JSON en el backend.
+5. El frontend nunca accede directamente a los archivos, solo a través de la API.
+
+En resumen:  
+Usuario (HTML) → app.js (fetch) → API (index.js) → Archivos JSON  
+         ←         ← respuesta JSON ←
+
+========================================================== */
