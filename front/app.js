@@ -262,6 +262,9 @@ async function cargarCategorias() {
           <tr>
             <td>${cat.id}</td>
             <td>${cat.name}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="eliminarCategoria(${cat.id})">Eliminar</button>
+            </td>
           </tr>
         `;
       });
@@ -337,3 +340,22 @@ async function buscarAlumno() {
 }
 // Hacer la función global
 window.buscarAlumno = buscarAlumno;
+
+async function eliminarCategoria(id) {
+  if (!id) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/categories/${id}`, {
+      method: "DELETE",
+      headers: GET_HEADERS
+    });
+    if (res.ok) {
+      Swal.fire("Eliminada", "Categoría eliminada correctamente.", "success");
+      cargarCategorias();
+    } else {
+      Swal.fire("Error", "No se pudo eliminar la categoría", "error");
+    }
+  } catch {
+    Swal.fire("Error", "Error de conexión al eliminar categoría", "error");
+  }
+}
+window.eliminarCategoria = eliminarCategoria;

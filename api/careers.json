@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": 1,
+    "name": "Ingles",
+    "category": "3",
+    "categoryName": "Profesorado"
+  },
+  {
+    "id": 2,
+    "name": "Informatica",
+    "category": "1",
+    "categoryName": "Diplomatura"
+  },
+  {
+    "id": 3,
+    "name": "Ciencia de datos",
+    "category": "5",
+    "categoryName": "Tecnicatura superior"
+  },
+  {
+    "id": 4,
+    "name": "Matematicas",
+    "category": "3",
+    "categoryName": "Profesorado"
+  }
+]
