@@ -1,0 +1,20 @@
+DOCUMENTACIÓN DEL MODELO DE IA UTILIZADO
+
+✅ MODELO: ChatGPT (GPT-4, OpenAI)
+Utilizado para:
+- Asistir en la planificación del sistema.
+- Generar la estructura HTML de todas las páginas.
+- Crear el archivo CSS con diseño uniforme.
+- Desarrollar las funciones JavaScript (fetch, eventos, etc).
+- Integrar SweetAlert para mejorar la interacción con el usuario.
+- Sugerir una estructura modular y reutilizable del proyecto.
+
+📌 PROMPTS QUE MÁS FUNCIONARON:
+
+1. "Ayudame a crear un formulario en HTML para registrar alumnos con nombre y carrera, usando Bootstrap."
+2. "Generá una función en JS que haga POST a una API para guardar un alumno y use sweetalert si sale bien."
+3. "Quiero que el select de carreras se cargue desde una API usando fetch, ¿cómo lo hago?"
+4. "Agregame una tabla con Bootstrap que muestre todos los alumnos con ID, nombre y carrera."
+5. "Dame una hoja de estilos clara, sencilla y profesional para una web académica."
+
+El modelo fue clave para acelerar y estructurar el desarrollo cumpliendo todos los requisitos del trabajo práctico.

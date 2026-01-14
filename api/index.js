@@ -11,109 +11,123 @@ const API_KEY = '12345ABCDEF';
 app.use(cors());
 app.use(express.json());
 
-// Archivo donde se almacenan los estudiantes
+// Archivos de datos
 const STUDENTS_FILE = './students.json';
+const CAREERS_FILE = './careers.json';
+const CATEGORIES_FILE = './categories.json';
 
-// Función para leer estudiantes desde archivo
-function loadStudents() {
-    try {
-        const data = fs.readFileSync(STUDENTS_FILE, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error("Error loading students, using empty list.", error);
-        return [];
-    }
+// Funciones utilitarias
+function loadData(file) {
+    if (!fs.existsSync(file)) return [];
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+function saveData(file, data) {
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-// Función para guardar estudiantes en archivo
-function saveStudents(students) {
-    try {
-        fs.writeFileSync(STUDENTS_FILE, JSON.stringify(students, null, 2));
-    } catch (error) {
-        console.error("Error saving students:", error);
-    }
-}
-
-// Inicializar estudiantes
-let students = loadStudents();
-
-// Middleware para validar API Key
+// Autenticación simple por API Key
 app.use((req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || authHeader !== `Bearer ${API_KEY}`) {
-        return res.status(401).json({ error: 'Unauthorized. Invalid API Key.' });
+    if (
+        req.method === "OPTIONS" ||
+        req.headers.authorization === `Bearer ${API_KEY}`
+    ) {
+        next();
+    } else {
+        res.status(401).json({ error: "Unauthorized" });
     }
-    next();
 });
 
-// ============================
-// Endpoints
-// ============================
+// ================== CATEGORÍAS ==================
+app.get('/api/categories', (req, res) => {
+    const categories = loadData(CATEGORIES_FILE);
+    res.json(categories);
+});
 
-// Registrar nuevo estudiante
-app.post('/api/students', (req, res) => {
-    const { name, career } = req.body;
+app.post('/api/categories', (req, res) => {
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ error: "Name is required" });
 
-    if (!name || !career) {
-        return res.status(400).json({ error: "Missing required fields: name and career." });
+    const categories = loadData(CATEGORIES_FILE);
+    if (categories.find(c => c.name.toLowerCase() === name.toLowerCase())) {
+        return res.status(409).json({ error: "Category already exists" });
     }
+    const newId = categories.length ? categories[categories.length - 1].id + 1 : 1;
+    const newCategory = { id: newId, name };
+    categories.push(newCategory);
+    saveData(CATEGORIES_FILE, categories);
+    res.status(201).json(newCategory);
+});
 
-    const newId = students.length ? students[students.length - 1].id + 1 : 1;
+// ================== CARRERAS ==================
+app.get('/api/careers', (req, res) => {
+    const careers = loadData(CAREERS_FILE);
+    res.json(careers);
+});
 
-    const newStudent = {
+app.post('/api/careers', (req, res) => {
+    const { name, category, categoryName } = req.body;
+    if (!name || !category || !categoryName) {
+        return res.status(400).json({ error: "Missing required fields: name, category, categoryName." });
+    }
+    const careers = loadData(CAREERS_FILE);
+    if (careers.find(c => c.name.toLowerCase() === name.toLowerCase())) {
+        return res.status(409).json({ error: "Career already exists." });
+    }
+    const newId = careers.length ? careers[careers.length - 1].id + 1 : 1;
+    const newCareer = {
         id: newId,
         name,
-        career
+        category,
+        categoryName
     };
-
-    students.push(newStudent);
-    saveStudents(students); // Guardar cambios
-
-    return res.status(201).json({ message: "Student registered successfully.", student: newStudent });
+    careers.push(newCareer);
+    saveData(CAREERS_FILE, careers);
+    res.status(201).json(newCareer);
 });
 
-// Consultar estudiante por ID
-app.get('/api/students/:id', (req, res) => {
+app.delete('/api/careers/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const student = students.find(s => s.id === id);
-
-    if (!student) {
-        return res.status(404).json({ error: "Student not found." });
+    let careers = loadData(CAREERS_FILE);
+    const initialLength = careers.length;
+    careers = careers.filter(c => c.id !== id);
+    if (careers.length === initialLength) {
+        return res.status(404).json({ error: "Career not found" });
     }
-
-    return res.status(200).json(student);
+    saveData(CAREERS_FILE, careers);
+    res.json({ message: "Career deleted" });
 });
 
-// Consultar estudiantes por carrera
+// ================== ESTUDIANTES ==================
 app.get('/api/students', (req, res) => {
-    const career = req.query.career;
-
-    if (!career) {
-        return res.status(400).json({ error: "Career filter is required." });
-    }
-
-    const filtered = students.filter(s => s.career.toLowerCase() === career.toLowerCase());
-    return res.status(200).json(filtered);
+    const students = loadData(STUDENTS_FILE);
+    res.json(students);
 });
 
-// Eliminar estudiante por ID
+app.post('/api/students', (req, res) => {
+    const { name, career } = req.body;
+    if (!name || !career) {
+        return res.status(400).json({ error: "Missing required fields: name, career." });
+    }
+    const students = loadData(STUDENTS_FILE);
+    const newId = students.length ? students[students.length - 1].id + 1 : 1;
+    const newStudent = { id: newId, name, career };
+    students.push(newStudent);
+    saveData(STUDENTS_FILE, students);
+    res.status(201).json(newStudent);
+});
+
 app.delete('/api/students/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const index = students.findIndex(s => s.id === id);
-
-    if (index === -1) {
-        return res.status(404).json({ error: "Student not found for deletion." });
+    let students = loadData(STUDENTS_FILE);
+    const initialLength = students.length;
+    students = students.filter(s => s.id !== id);
+    if (students.length === initialLength) {
+        return res.status(404).json({ error: "Student not found" });
     }
-
-    students.splice(index, 1);
-    saveStudents(students); // Guardar cambios
-
-    return res.status(200).json({ message: "Student deleted successfully." });
+    saveData(STUDENTS_FILE, students);
+    res.json({ message: "Student deleted" });
 });
 
-// ============================
-// Start server
-// ============================
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`API running on http://localhost:${PORT}`);
 });

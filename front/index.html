@@ -1,42 +1,84 @@
+<!-- alumnos.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Student API Client</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Alumnos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/> 
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-    <h1>Student API Client</h1>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">Instituto</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Alumnos</a></li>
+          <li class="nav-item"><a class="nav-link" href="carreras.html">Carreras</a></li>
+          <li class="nav-item"><a class="nav-link" href="categorias.html">Categorías</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <section>
-        <h2>Register Student</h2>
-        <input type="text" id="registerName" placeholder="Name">
-        <input type="text" id="registerCareer" placeholder="Career">
-        <button onclick="registerStudent()">Register</button>
-        <pre id="registerResult"></pre>
-    </section>
+  <main class="container mt-5">
+    <h1>Registrar Alumno</h1>
+    <form id="formAlumno" class="mb-4">
+      <div class="mb-3">
+        <label for="nombreAlumno" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombreAlumno" required>
+      </div>
+      <div class="mb-3">
+        <label for="carreraAlumno" class="form-label">Carrera</label>
+        <select id="carreraAlumno" class="form-select" required>
+          <option selected disabled>Seleccione una carrera</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
 
-    <section>
-        <h2>Get Student by ID</h2>
-        <input type="number" id="studentId" placeholder="Student ID">
-        <button onclick="getStudentById()">Get Student</button>
-        <pre id="getResult"></pre>
-    </section>
+    <hr />
 
-    <section>
-        <h2>Get Students by Career</h2>
-        <input type="text" id="careerFilter" placeholder="Career">
-        <button onclick="getStudentsByCareer()">Get Students</button>
-        <pre id="careerResult"></pre>
-    </section>
+    <h2>Buscar Alumno por ID</h2>
+    <div class="input-group mb-3">
+      <input type="number" id="buscarAlumnoId" class="form-control" placeholder="ID del alumno">
+      <button class="btn btn-info" onclick="buscarAlumno()">Buscar</button>
+    </div>
+    
+<h2>Listado de Alumnos</h2>
+<button class="btn btn-secondary mb-3" onclick="cargarAlumnos()">Recargar lista</button>
+<button class="btn btn-outline-primary mb-3 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAlumnos" aria-expanded="true" aria-controls="collapseAlumnos" id="toggleAlumnosBtn">
+  Ocultar listado
+</button>
+<div class="collapse show" id="collapseAlumnos">
+  <table class="table table-striped" id="tablaAlumnos">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Carrera</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Se carga dinámicamente -->
+    </tbody>
+  </table>
+</div>
+  </main>
 
-    <section>
-        <h2>Delete Student</h2>
-        <input type="number" id="deleteId" placeholder="Student ID">
-        <button onclick="deleteStudent()">Delete Student</button>
-        <pre id="deleteResult"></pre>
-    </section>
-
-    <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const toggleAlumnosBtn = document.getElementById('toggleAlumnosBtn');
+    const collapseAlumnosDiv = document.getElementById('collapseAlumnos');
+    collapseAlumnosDiv.addEventListener('show.bs.collapse', () => {
+      toggleAlumnosBtn.textContent = 'Ocultar listado';
+    });
+    collapseAlumnosDiv.addEventListener('hide.bs.collapse', () => {
+      toggleAlumnosBtn.textContent = 'Mostrar listado';
+    });
+  </script>
 </body>
 </html>
